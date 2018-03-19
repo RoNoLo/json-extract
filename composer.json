@@ -1,0 +1,14 @@
+{
+  "name": "foo/tests",
+  "description": "manages shorturls and other useful redirects",
+  "license": "proprietary",
+  "require-dev": {
+    "phpunit/phpunit": "6.*"
+  },
+  "autoload": {
+    "classmap": [
+      "src/",
+      "tests/"
+    ]
+  }
+}
