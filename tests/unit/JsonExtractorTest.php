@@ -43,6 +43,11 @@ class JsonExtractorTest extends TestCase
                 __DIR__ . '/../resources/universalAnalyticsOptsResult.json',
                 'universalAnalyticsOpts',
             ],
+            [
+                __DIR__ . '/../resources/ek.html',
+                __DIR__ . '/../resources/berndResult.json',
+                'bernd',
+            ],
         ];
     }
 
@@ -65,7 +70,7 @@ class JsonExtractorTest extends TestCase
         return [
             [
                 __DIR__ . '/../resources/ek.html',
-                36,
+                13,
             ],
             [
                 __DIR__ . '/../resources/zldo.html',
