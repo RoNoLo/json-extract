@@ -1,0 +1,33 @@
+{
+  "account": "UA-2435636XXXX",
+  "domain": "ebay-kleinanzeigen.de",
+  "userId": "2034",
+  "dimensions": [{"index": 1, "value": "MyAds"}, {"index": 2, "value": ""}, {
+    "index": 3,
+    "value": ""
+  }, {"index": 6, "value": ""}, {"index": 7, "value": ""}, {"index": 8, "value": ""}, {
+    "index": 9,
+    "value": ""
+  }, {"index": 10, "value": ""}, {"index": 11, "value": ""}, {"index": 12, "value": ""}, {
+    "index": 13,
+    "value": ""
+  }, {"index": 20, "value": "2039"}, {
+    "index": 21,
+    "value": "mKKmXaT1ZLHTahXXXX6REDVV7EDP6lSJEAT4gBHcg=="
+  }, {"index": 23, "value": "true"}, {"index": 24, "value": "UNKNOWN"}, {
+    "index": 25,
+    "value": "distribution_test-b;treebay_groupId-a;web_adv-a-default;PRO_external_url_vip-DEFAULT;feature_bundle_test-control-off;"
+  }, {"index": 90, "value": ""}, {"index": 91, "value": ""}, {"index": 94, "value": ""}, {
+    "index": 95,
+    "value": ""
+  }, {"index": 96, "value": ""}, {"index": 97, "value": ""}, {
+    "index": 121,
+    "value": "registered"
+  }, {"index": 125, "value": "distribution_test-b"}, {
+    "index": 126,
+    "value": "treebay_groupId-a"
+  }, {"index": 131, "value": "PRO_external_url_vip-DEFAULT"}, {
+    "index": 132,
+    "value": "feature_bundle_test-control-off"
+  }, {"index": 135, "value": "web_adv-a-default"}, {"index": 136, "value": "PRIVATE"}]
+}

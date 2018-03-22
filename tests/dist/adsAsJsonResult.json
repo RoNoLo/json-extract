@@ -1,0 +1,68 @@
+{
+  "success": [],
+  "error": [],
+  "ads": [
+    {
+      "id": 854363465,
+      "title": "KompXXXXXXXXXXXX20V",
+      "price": "50 €",
+      "category": "Handarbeit, Basteln & Kunsthandwerk",
+      "endDate": "12.05.2018",
+      "viewCount": 40,
+      "watchCount": 0,
+      "extensionFee": false,
+      "articles": [
+        {
+          "id": "821234:430",
+          "type": "AD_BUMP_UP",
+          "price": 1.95,
+          "priceFormatted": "1,95 €",
+          "runtimeText": "einmalig"
+        },
+        {
+          "id": "822342347:288",
+          "type": "AD_HIGHLIGHT",
+          "price": 2.95,
+          "priceFormatted": "2,95 €",
+          "runtimeText": "7 Tage"
+        },
+        {
+          "id": "82324234:998",
+          "type": "AD_MULTI_BUMP_UP",
+          "price": 6.95,
+          "priceFormatted": "6,95 €",
+          "runtimeText": "7 Tage"
+        },
+        {
+          "id": "823423423487:146",
+          "type": "AD_TOP_AD",
+          "price": 7.95,
+          "priceFormatted": "7,95 €",
+          "runtimeText": "7 Tage"
+        },
+        {
+          "id": "822342347:572",
+          "type": "AD_HP_GALLERY",
+          "price": 19.95,
+          "priceFormatted": "19,95 €",
+          "runtimeText": "10 Tage"
+        }
+      ],
+      "image": "https://i.ebayimg.com/00/sXXXXRamdln/$_9.JPG",
+      "state": "active",
+      "seoUrl": "https://www.ebay-kleinanzeigen.de/s-anzeige/kompressor-c/1987-282-7919",
+      "replies": 0
+    }
+  ],
+  "paging": {
+    "pageNum": 1,
+    "pageSize": 25,
+    "numFound": 1,
+    "last": 1,
+    "lastUncapped": 1,
+    "display": [
+      1
+    ]
+  },
+  "bizModelPresent": false
+}
