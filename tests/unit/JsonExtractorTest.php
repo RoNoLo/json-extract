@@ -31,23 +31,23 @@ class JsonExtractorTest extends TestCase
     {
         return [
             [
-                __DIR__ . '/../resources/ek.html',
-                __DIR__ . '/../resources/adsAsJsonResult.json',
+                __DIR__ . '/../dist/ek.html',
+                __DIR__ . '/../dist/adsAsJsonResult.json',
                 'adsAsJson',
             ],
             [
-                __DIR__ . '/../resources/ek.html',
-                __DIR__ . '/../resources/iam_dataResult.json',
+                __DIR__ . '/../dist/ek.html',
+                __DIR__ . '/../dist/iam_dataResult.json',
                 'iam_data',
             ],
             [
-                __DIR__ . '/../resources/ek.html',
-                __DIR__ . '/../resources/universalAnalyticsOptsResult.json',
+                __DIR__ . '/../dist/ek.html',
+                __DIR__ . '/../dist/universalAnalyticsOptsResult.json',
                 'universalAnalyticsOpts',
             ],
             [
-                __DIR__ . '/../resources/ek.html',
-                __DIR__ . '/../resources/berndResult.json',
+                __DIR__ . '/../dist/ek.html',
+                __DIR__ . '/../dist/berndResult.json',
                 'bernd',
             ],
         ];
@@ -71,11 +71,11 @@ class JsonExtractorTest extends TestCase
     {
         return [
             [
-                __DIR__ . '/../resources/ek.html',
+                __DIR__ . '/../dist/ek.html',
                 13,
             ],
             [
-                __DIR__ . '/../resources/zldo.html',
+                __DIR__ . '/../dist/zldo.html',
                 23,
             ],
         ];
