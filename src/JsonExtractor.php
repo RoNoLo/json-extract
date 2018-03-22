@@ -23,7 +23,7 @@ class JsonExtractor
      *
      * @param $var
      * @return string
-     * @throws Exception
+     * @throws \Exception
      */
     public function extractVariable($var)
     {
@@ -55,7 +55,7 @@ class JsonExtractor
     /**
      * @param $var
      * @return bool|int
-     * @throws Exception
+     * @throws \Exception
      */
     private function findVariableStart($var)
     {
@@ -79,7 +79,7 @@ class JsonExtractor
     /**
      * @param $startPosition
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     private function findVariableEnd($startPosition, &$string)
     {
