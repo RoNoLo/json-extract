@@ -1,5 +1,7 @@
 <?php
 
+namespace RoNoLo\JsonExtractor;
+
 class JsonExtractor
 {
     private $string;

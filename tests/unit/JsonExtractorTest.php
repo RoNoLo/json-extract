@@ -1,5 +1,7 @@
 <?php
 
+namespace RoNoLo\JsonExtractor;
+
 use PHPUnit\Framework\TestCase;
 
 class JsonExtractorTest extends TestCase
