@@ -6,13 +6,21 @@ use PHPUnit\Framework\TestCase;
 
 class JsonExtractorTest extends TestCase
 {
+    /** @var JsonExtractor */
+    private $jsonExtractor;
+
+    protected function setUp()
+    {
+        $this->jsonExtractor = new JsonExtractor();
+    }
+
     /**
      * @dataProvider canExtractJsonVariableDataProvider
      *
      * @param $html
      * @param $expected
      * @param $var
-     * @throws Exception
+     * @throws \Exception
      */
     public function testCanExtractJsonVariable($html, $expected, $var)
     {
@@ -20,9 +28,7 @@ class JsonExtractorTest extends TestCase
 
         $expected = json_decode(file_get_contents($expected), JSON_OBJECT_AS_ARRAY);
 
-        $je = new JsonExtractor($html);
-
-        $result = $je->extractVariable($var);
+        $result = $this->jsonExtractor->extractJsonAfterIdentifier($var, $html);
 
         $this->assertEquals($expected, $result);
     }
@@ -47,6 +53,11 @@ class JsonExtractorTest extends TestCase
             ],
             [
                 __DIR__ . '/../dist/ek.html',
+                __DIR__ . '/../dist/bannerOptsResult.json',
+                'bannerOpts',
+            ],
+            [
+                __DIR__ . '/../dist/ek.html',
                 __DIR__ . '/../dist/berndResult.json',
                 'bernd',
             ],
@@ -55,14 +66,13 @@ class JsonExtractorTest extends TestCase
 
     /**
      * @dataProvider canExtractAllJsonObjectsDataProvider
+     * @throws JsonExtractorException
      */
     public function testCanExtractAllJsonObjects($testFile, $expected)
     {
         $html = file_get_contents($testFile);
 
-        $je = new JsonExtractor($html);
-
-        $result = $je->extractAllJsonData();
+        $result = $this->jsonExtractor->extractAllJsonData($html);
 
         $this->assertEquals($expected, count($result));
     }
@@ -72,12 +82,51 @@ class JsonExtractorTest extends TestCase
         return [
             [
                 __DIR__ . '/../dist/ek.html',
-                13,
+                11,
             ],
             [
                 __DIR__ . '/../dist/zldo.html',
-                23,
+                28,
             ],
         ];
+    }
+
+    /**
+     * @throws JsonExtractorException
+     */
+    public function testThrowsExceptionWhenNoJsonIsFoundInString()
+    {
+        $this->expectException(JsonExtractorException::class);
+        $this->expectExceptionMessage("No JSON was found after given offset");
+
+        $string = file_get_contents(__DIR__ . '/../dist/stringWithNoJson.txt');
+
+        $this->jsonExtractor->extractAllJsonData($string);
+    }
+
+    /**
+     * @throws JsonExtractorException
+     */
+    public function testThrowsExceptionWhenBrokenJsonIsFound()
+    {
+        $this->expectException(JsonExtractorException::class);
+        $this->expectExceptionMessage("End of JSON object / array could not be found");
+
+        $string = file_get_contents(__DIR__ . '/../dist/stringWithBrokenJson.txt');
+
+        $this->jsonExtractor->extractAllJsonData($string);
+    }
+
+    /**
+     * @throws JsonExtractorException
+     */
+    public function testThrowsExceptionWhenIdentifierWasNotFound()
+    {
+        $this->expectException(JsonExtractorException::class);
+        $this->expectExceptionMessage("The identifier was not found in the string");
+
+        $string = file_get_contents(__DIR__ . '/../dist/ek.html');
+
+        $this->jsonExtractor->extractJsonAfterIdentifier("john", $string);
     }
 }

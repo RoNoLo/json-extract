@@ -1,0 +1,38 @@
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+no sea takimata sanctus [{
+    "id": "821234:430",
+    "type": "AD_BUMP_UP",
+    "price": 1.95,
+    "priceFormatted": "1,95 €",
+    "runtimeText": "einmalig"
+}, {
+    "id": "822342347:288",
+    "type": "AD_HIGHLIGHT",
+    "price": 2.95,
+    "priceFormatted": "2,95 €",
+    "runtimeText": "7 Tage"
+}, {
+    "id": "82324234:998",
+    "type": "AD_MULTI_BUMP_UP",
+    "price": 6.95,
+    "priceFormatted": "6,95 €",
+    "runtimeText": "7 Tage"
+}, {
+    "id": "823423423487:146",
+    "type": "AD_TOP_AD",
+    "price": 7.95,
+    "priceFormatted": "7,95 €",
+    "runtimeText": "7 Tage"
+}, {
+    "id": "822342347:572",
+    "type": "AD_HP_GALLERY",
+    "price": 19.95,
+    "priceFormatted": "19,95 €",
+    "runtimeText": "10 Tage"
+} est Lorem ipsum dolor sit amet. Lorem ipsum olor sit amet,
+consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
+duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+Lorem ipsum dolor sit amet.

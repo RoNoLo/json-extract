@@ -3,41 +3,42 @@
 ## Abstract
 
 Small class, which will try to extract JSON strings from a string. 
-There are two functions which will achive this.
+There are two functions which will achieve this.
 
 ## Use
 
 ```php
 <?php
  
-// $html contains a HTML full page string
-$jsonExtractor = new JsonExtractor($html);
+$jsonExtractor = new JsonExtractor();
  
-$json = $jsonExtractor->extractVariable('foobar');
+// $html contains a HTML full page string (as example)
+$json = $jsonExtractor->extractJsonAfterIdentifier("foobar", $html);
 ```
  
- This will expect a JavaScript variable with that name and a following 
- JSON definition which must be an array or object.
+ This will expect the identifier somewhere in the given string. The identifier
+ position will act as starting point and the next valid JSON object or array will
+ be returned as PHP array.
  
 ```php
 <?php
  
-// $html contains a HTML full page string
-$jsonExtractor = new JsonExtractor($html);
+$jsonExtractor = new JsonExtractor();
  
-$vars = $jsonExtractor->extractAllJsonData();
+// $html contains a HTML full page string
+$vars = $jsonExtractor->extractAllJsonData($html);
 ```
 
-This will look for any JSON objects (not arrays) in the string and 
-returns them as an array or JSON data. Variable names are ignored. You
-may have to check the list of JSON data for data you was looking for.
+This will look for any JSON objects or arrays in the string and 
+returns them as an array of arrays of JSON data. You may have to check the 
+list of JSON data for data you was looking for.
  
 ## Limitations
  
 Only objects and arrays are supported. Because of no further dependencies 
 only JSON valid to the json_decode() function is supported. That means JSON
 with single quotes and JSON which is a true object notation to JavaScript 
-may not be supported.
+may not be supported (were the keys have no quotes).
 
 ## Motivation
 

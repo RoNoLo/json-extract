@@ -5,12 +5,6 @@ namespace RoNoLo\JsonExtractor;
 class JsonExtractor
 {
     private $string;
-    private $stringOrg;
-
-    public function __construct($string)
-    {
-        $this->string = $string;
-    }
 
     /**
      * Will extract the JSON of a declaration like this:
@@ -21,69 +15,96 @@ class JsonExtractor
      *
      * It needs to have a name equals object or array.
      *
-     * @param $var
-     * @return string
-     * @throws \Exception
+     * @param string $identifier
+     * @return array
+     * @throws JsonExtractorException
      */
-    public function extractVariable($var)
+    public function extractJsonAfterIdentifier($identifier, $string)
     {
-        $startPosition = $this->findVariableStart($var);
-        $endPosition = $this->findVariableEnd($startPosition, $this->string);
+        $this->string = $string;
+        $this->ensureAnyJsonAfterOffset();
 
-        $json = substr($this->string, $startPosition, $endPosition - $startPosition + 1);
+        $this->ensureIdentifierInString($identifier);
 
-        return json_decode($json, JSON_OBJECT_AS_ARRAY);
+        $pos = strpos($this->string, $identifier);
+        $this->ensureAnyJsonAfterOffset($pos);
+
+        $startPosition = $this->findJsonStart($pos + 1);
+        $endPosition = $this->findJsonEnd($startPosition);
+        $json = $this->decodeJson($startPosition, $endPosition);
+
+        $this->string = null;
+
+        return $json;
     }
 
     /**
-     * Will extract all JSON data from all <script>...</script> tags.
+     * Will extract all JSON data it can find in a string
      *
      * Only objects will be extracted.
+     * @param string $string
+     * @return array
+     * @throws JsonExtractorException
      */
-    public function extractAllJsonData()
+    public function extractAllJsonData($string)
     {
-        $this->stringBackup();
+        $this->string = $string;
+        $this->ensureAnyJsonAfterOffset();
 
-        $scriptTags = $this->findAllScriptTags();
-        $vars = $this->findAllJsonObjects($scriptTags);
+        $vars = [];
+        $offset = 0;
+        while (true) {
+            try {
+                $startPosition = $this->findJsonStart($offset);
+            } catch (JsonExtractorException $e) {
+                $this->string = null;
 
-        $this->stringRestore();
+                if (!count($vars)) {
+                    throw new JsonExtractorException("No valid JSON could be found in the given string");
+                }
 
-        return $vars;
+                return $vars;
+            }
+
+            $endPosition = $this->findJsonEnd($startPosition);
+
+            try {
+                $json = $this->decodeJson($startPosition, $endPosition);
+
+                $vars[] = $json;
+                $offset = $endPosition;
+            } catch (JsonExtractorException $e) {
+                $offset = $startPosition + 1;
+            }
+        }
     }
 
     /**
-     * @param $var
-     * @return bool|int
-     * @throws \Exception
+     * @param $offset
+     * @return int
+     * @throws JsonExtractorException
      */
-    private function findVariableStart($var)
+    private function findJsonStart($offset = 0)
     {
-        // Find the variable name
-        $pos = strpos($this->string, $var);
-
-        // Find the next = sign
-        $pos = strpos($this->string, '=', $pos + 1);
-
         // Now find the very next symbol which needs to be { or [
         $strLength = strlen($this->string);
-        for ($i = $pos; $i < $strLength; $i++) {
+        for ($i = $offset; $i < $strLength; $i++) {
             if (in_array($this->string[$i], ['[', '{'])) {
                 return $i;
             }
         }
 
-        throw new \Exception("Could not find JSON object or array, with the given name");
+        throw new JsonExtractorException("Could not find any JSON object or array after the given offset");
     }
 
     /**
      * @param $startPosition
      * @return mixed
-     * @throws \Exception
+     * @throws JsonExtractorException
      */
-    private function findVariableEnd($startPosition, &$string)
+    private function findJsonEnd($startPosition)
     {
-        $symbolOpen = $string[$startPosition];
+        $symbolOpen = $this->string[$startPosition];
         $symbolClose = $symbolOpen === '{' ? '}' : ']';
 
         $stack = [];
@@ -93,18 +114,16 @@ class JsonExtractor
         while (true) {
             $i++;
 
-            $foo = $string[$i];
-
-            if (!isset($string[$i])) {
-                throw new \Exception("End of JSON object / array could not be found");
+            if (!isset($this->string[$i])) {
+                throw new JsonExtractorException("End of JSON object / array could not be found");
             }
 
-            if ($string[$i] == $symbolOpen) {
+            if ($this->string[$i] == $symbolOpen) {
                 $stack[] = $symbolClose;
                 continue;
             }
 
-            if ($string[$i] == $symbolClose) {
+            if ($this->string[$i] == $symbolClose) {
                 array_pop($stack);
 
                 if (!count($stack)) {
@@ -115,79 +134,51 @@ class JsonExtractor
         }
     }
 
-    private function stringBackup()
+    /**
+     * @param $startPosition
+     * @param $endPosition
+     * @return mixed
+     * @throws JsonExtractorException
+     */
+    private function decodeJson($startPosition, $endPosition)
     {
-        $this->stringOrg = $this->string;
-    }
+        $json = substr($this->string, $startPosition, $endPosition - $startPosition + 1);
 
-    private function stringRestore()
-    {
-        $this->string = $this->stringOrg;
-    }
+        $return = json_decode($json, JSON_OBJECT_AS_ARRAY);
 
-    private function findAllScriptTags()
-    {
-        if (preg_match_all('#<script(.*?)>(.*?)</script>#is', $this->string, $matches)) {
-            $list = [];
-            foreach ($matches[2] as $script) {
-                if (trim($script) !== '') {
-                    $list[] = trim($script);
-                }
-            }
+        if (!$return) {
+            $errorMessage = json_last_error_msg();
 
-            return $list;
+            throw new JsonExtractorException($errorMessage);
         }
 
-        return [];
+        return $return;
     }
 
-    private function findAllJsonObjects($scriptTags)
+    /**
+     * @param $identifier
+     * @throws JsonExtractorException
+     */
+    private function ensureIdentifierInString($identifier)
     {
-        $vars = [];
-        foreach ($scriptTags as $scriptTag) {
-            $result = $this->extractJsonObjects($scriptTag);
+        $pos = strpos($this->string, $identifier);
 
-            if ($result) {
-                $vars = array_merge($vars, $result);
-            }
+        if ($pos === false) {
+            throw new JsonExtractorException("The identifier was not found in the string");
         }
-
-        return $vars;
     }
 
-    private function extractJsonObjects($scriptTag)
+    /**
+     * @param int $offset
+     * @throws JsonExtractorException
+     */
+    private function ensureAnyJsonAfterOffset($offset = 0)
     {
-        // Quick check if the string contains something useful.
-        if (strpos($scriptTag, '{') === false) {
-            return null;
+        $object = strpos($this->string, '{');
+        $array = strpos($this->string, '[');
+
+        if ($object === false && $array === false) {
+            throw new JsonExtractorException("No JSON was found after given offset");
         }
-
-        $vars = [];
-        $offset = 0;
-        while (true) {
-            $start = strpos($scriptTag, '{', $offset);
-
-            if ($start === false) {
-                return $vars;
-            }
-
-            $end = $this->findVariableEnd($start, $scriptTag);
-
-            $json = substr($scriptTag, $start, $end - $start + 1);
-
-            $data = json_decode($json, JSON_OBJECT_AS_ARRAY);
-
-            if ($data) {
-                $vars[] = $data;
-                $offset = $end;
-            } else {
-                $offset = $start + 1;
-
-                $error = json_last_error();
-                $errorMsg = json_last_error_msg();
-            }
-        }
-
-        return $vars;
     }
 }

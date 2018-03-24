@@ -1,0 +1,23 @@
+{
+  "cat": "0",
+  "tcat": "0",
+  "city": "",
+  "plz": "",
+  "page": "MyAds",
+  "kw": "getting real",
+  "lsc": [],
+  "lsk": ["getting real"],
+  "region": "None",
+  "hn": "ebay-kleinanzeigen.de",
+  "pt": "MyAds",
+  "ct": "0,0",
+  "hu": "eb20772bf9aXXXXc613d",
+  "li": "1",
+  "ptg": "js-errorlog-default,browser-referer-alerting-a_default-group_referer_alerting-off,14-treebay-b2c-default,2-testbanner-default,vip-buyer-survey-off,hompage-modal-survey-off,24-yield-optimization-medium-a,25-testgrouptest-distribution_test-b,26-treebay-testgroups-treebay_groupid-a,27-yield-optimization-small-a,28-long-feed-a-feed,29-testgrouptest-old-alg-distribution_old_test-b,36-grpc-a-grpc-off,4-prebid-update-default,42-tmx-profiling-tmx-on,5-dfpbanner-control,8-store-url-on-vip-pro_external_url_vip-default,9-featurebundle-test-feature_bundle_test-control-off,99-test-support-default",
+  "extParams": {
+    "Verkaeufer": "privat",
+    "yo_s": "A",
+    "yo_m": "A",
+    "abtest": "control"
+  }
+}
