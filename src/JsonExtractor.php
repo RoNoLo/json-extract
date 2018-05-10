@@ -147,9 +147,52 @@ class JsonExtractor
         $return = json_decode($json, JSON_OBJECT_AS_ARRAY);
 
         if (!$return) {
-            $errorMessage = json_last_error_msg();
+            $return = $this->convertObjectToJson($json);
 
-            throw new JsonExtractorException($errorMessage);
+            if (!$return) {
+                $errorMessage = json_last_error_msg();
+
+                throw new JsonExtractorException($errorMessage);
+            }
+        }
+
+        return $return;
+    }
+
+    private function convertObjectToJson($json)
+    {
+        $json = preg_replace(
+            '/(\w+)\s{0,1}:/',
+            '"\1":',
+            str_replace(["\r\n", "\r", "\n", "\t"], "", $json)
+        );
+
+        if (is_string($json)) {
+            $return = json_decode($json, JSON_OBJECT_AS_ARRAY);
+
+            if (!$return) {
+                $json = preg_replace(
+                    "/:\s{0,1}'([^']+)'/",
+                    ': "\1"',
+                    $json
+                );
+
+                if (is_string($json)) {
+                    $return = json_decode($json, JSON_OBJECT_AS_ARRAY);
+
+                    if (!$return) {
+                        $json = preg_replace(
+                            "/'(\w+)'\s{0,1}:/",
+                            ': "\1"',
+                            $json
+                        );
+
+                        if (is_string($json)) {
+                            $return = json_decode((string)$json, JSON_OBJECT_AS_ARRAY);
+                        }
+                    }
+                }
+            }
         }
 
         return $return;
@@ -180,5 +223,9 @@ class JsonExtractor
         if ($object === false && $array === false) {
             throw new JsonExtractorException("No JSON was found after given offset");
         }
+    }
+
+    private function tryReplaceQuotelessIdentifiers($json)
+    {
     }
 }
