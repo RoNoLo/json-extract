@@ -2,6 +2,11 @@
   "name": "ronolo/jsonextract",
   "description": "Extracts JSON from strings and returns PHP arrays.",
   "license": "proprietary",
+  "authors": [
+    {
+      "name": "Ronald Locke"
+    }
+  ],
   "require-dev": {
     "phpunit/phpunit": "6.*"
   },
