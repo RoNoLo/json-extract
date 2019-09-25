@@ -1,27 +1,31 @@
 <?php
 
-namespace RoNoLo\JsonExtractor;
+namespace RoNoLo\JsonExtractor\Service;
 
-class JsonExtractor
+use RoNoLo\JsonExtractor\Exception\JsonExtractorException;
+
+include_once __DIR__ . '/CJSON.php';
+
+class JsonExtractorService
 {
     private $string;
 
     /**
-     * Will extract the JSON of a declaration like this:
+     * Will extract the first JSON of a declaration like this:
      *
+     * <script type="bernd"> { ... }
      * var foo = { ... }
      * var foo = [ ... ]
      * foo = { ... }
      *
-     * It needs to have a name equals object or array.
-     *
      * @param string $identifier
+     * @param $html String of content i.e. HTML
      * @return array
      * @throws JsonExtractorException
      */
-    public function extractJsonAfterIdentifier($identifier, $string)
+    public function extractJsonAfterIdentifier($identifier, $html)
     {
-        $this->string = $string;
+        $this->string = $html;
         $this->ensureAnyJsonAfterOffset();
 
         $this->ensureIdentifierInString($identifier);
@@ -66,9 +70,8 @@ class JsonExtractor
                 return $vars;
             }
 
-            $endPosition = $this->findJsonEnd($startPosition);
-
             try {
+                $endPosition = $this->findJsonEnd($startPosition);
                 $json = $this->decodeJson($startPosition, $endPosition);
 
                 $vars[] = $json;
@@ -147,51 +150,12 @@ class JsonExtractor
         $return = json_decode($json, JSON_OBJECT_AS_ARRAY);
 
         if (!$return) {
-            $return = $this->convertObjectToJson($json);
+            $return = \CJSON::decode($json);
 
-            if (!$return) {
+            if (!$return || is_array($return) && !count(array_filter($return))) {
                 $errorMessage = json_last_error_msg();
 
                 throw new JsonExtractorException($errorMessage);
-            }
-        }
-
-        return $return;
-    }
-
-    private function convertObjectToJson($json)
-    {
-        $json = preg_replace(
-            '/(\w+)\s{0,1}:/',
-            '"\1":',
-            str_replace(["\r\n", "\r", "\n", "\t"], "", $json)
-        );
-
-        if (is_string($json)) {
-            $return = json_decode($json, JSON_OBJECT_AS_ARRAY);
-
-            if (!$return) {
-                $json = preg_replace(
-                    "/:\s{0,1}'([^']+)'/",
-                    ': "\1"',
-                    $json
-                );
-
-                if (is_string($json)) {
-                    $return = json_decode($json, JSON_OBJECT_AS_ARRAY);
-
-                    if (!$return) {
-                        $json = preg_replace(
-                            "/'(\w+)'\s{0,1}:/",
-                            ': "\1"',
-                            $json
-                        );
-
-                        if (is_string($json)) {
-                            $return = json_decode((string)$json, JSON_OBJECT_AS_ARRAY);
-                        }
-                    }
-                }
             }
         }
 
@@ -223,9 +187,5 @@ class JsonExtractor
         if ($object === false && $array === false) {
             throw new JsonExtractorException("No JSON was found after given offset");
         }
-    }
-
-    private function tryReplaceQuotelessIdentifiers($json)
-    {
     }
 }

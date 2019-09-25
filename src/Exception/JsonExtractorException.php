@@ -1,6 +1,6 @@
 <?php
 
-namespace RoNoLo\JsonExtractor;
+namespace RoNoLo\JsonExtractor\Exception;
 
 class JsonExtractorException extends \Exception
 {
