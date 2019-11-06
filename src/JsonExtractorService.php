@@ -1,8 +1,8 @@
 <?php
 
-namespace RoNoLo\JsonExtractor\Service;
+namespace RoNoLo\JsonExtractor;
 
-use RoNoLo\JsonExtractor\Exception\JsonExtractorException;
+use RoNoLo\JsonExtractor\JsonExtractorException;
 
 include_once __DIR__ . '/CJSON.php';
 

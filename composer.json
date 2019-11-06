@@ -23,7 +23,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "RoNoLo\\JsonExtractor\\Tests\\": "tests/"
+      "RoNoLo\\JsonExtractor\\Tests\\": "tests/src/"
     }
   }
 }

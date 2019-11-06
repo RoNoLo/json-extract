@@ -1,6 +1,6 @@
 <?php
 
-namespace RoNoLo\JsonExtractor\Service;
+namespace RoNoLo\JsonExtractor;
 
 use PHPUnit\Framework\TestCase;
 
@@ -37,33 +37,33 @@ class JsonExtractorSingleIdentifierExtractTest extends TestCase
     {
         return [
             [
-                __DIR__ . '/../dist/ek.html',
-                __DIR__ . '/../dist/adsAsJsonResult.json',
+                __DIR__ . '/../fixtures/ek.html',
+                __DIR__ . '/../fixtures/adsAsJsonResult.json',
                 'adsAsJson',
             ],
             [
-                __DIR__ . '/../dist/ek.html',
-                __DIR__ . '/../dist/iam_dataResult.json',
+                __DIR__ . '/../fixtures/ek.html',
+                __DIR__ . '/../fixtures/iam_dataResult.json',
                 'iam_data',
             ],
             [
-                __DIR__ . '/../dist/ek.html',
-                __DIR__ . '/../dist/universalAnalyticsOptsResult.json',
+                __DIR__ . '/../fixtures/ek.html',
+                __DIR__ . '/../fixtures/universalAnalyticsOptsResult.json',
                 'universalAnalyticsOpts',
             ],
             [
-                __DIR__ . '/../dist/ek.html',
-                __DIR__ . '/../dist/bannerOptsResult.json',
+                __DIR__ . '/../fixtures/ek.html',
+                __DIR__ . '/../fixtures/bannerOptsResult.json',
                 'bannerOpts',
             ],
             [
-                __DIR__ . '/../dist/ek.html',
-                __DIR__ . '/../dist/berndResult.json',
+                __DIR__ . '/../fixtures/ek.html',
+                __DIR__ . '/../fixtures/berndResult.json',
                 'bernd',
             ],
             [
-                __DIR__ . '/../dist/ek.html',
-                __DIR__ . '/../dist/BelenConfResult.json',
+                __DIR__ . '/../fixtures/ek.html',
+                __DIR__ . '/../fixtures/BelenConfResult.json',
                 'BelenConf',
             ],
         ];

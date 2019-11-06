@@ -1,9 +1,9 @@
 <?php
 
-namespace RoNoLo\JsonExtractor\Service;
+namespace RoNoLo\JsonExtractor;
 
 use PHPUnit\Framework\TestCase;
-use RoNoLo\JsonExtractor\Exception\JsonExtractorException;
+use RoNoLo\JsonExtractor\JsonExtractorException;
 
 class JsonExtractorExceptionsTest extends TestCase
 {
@@ -23,7 +23,7 @@ class JsonExtractorExceptionsTest extends TestCase
         $this->expectException(JsonExtractorException::class);
         $this->expectExceptionMessage("No JSON was found after given offset");
 
-        $string = file_get_contents(__DIR__ . '/../dist/stringWithNoJson.txt');
+        $string = file_get_contents(__DIR__ . '/../fixtures/stringWithNoJson.txt');
 
         $this->jsonExtractor->extractAllJsonData($string);
     }
@@ -36,7 +36,7 @@ class JsonExtractorExceptionsTest extends TestCase
         $this->expectException(JsonExtractorException::class);
         $this->expectExceptionMessage("The identifier was not found in the string");
 
-        $string = file_get_contents(__DIR__ . '/../dist/ek.html');
+        $string = file_get_contents(__DIR__ . '/../fixtures/ek.html');
 
         $this->jsonExtractor->extractJsonAfterIdentifier("john", $string);
     }

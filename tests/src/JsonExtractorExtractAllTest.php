@@ -1,9 +1,9 @@
 <?php
 
-namespace RoNoLo\JsonExtractor\Service;
+namespace RoNoLo\JsonExtractor;
 
 use PHPUnit\Framework\TestCase;
-use RoNoLo\JsonExtractor\Exception\JsonExtractorException;
+use RoNoLo\JsonExtractor\JsonExtractorException;
 
 class JsonExtractorExtractAllTest extends TestCase
 {
@@ -32,15 +32,15 @@ class JsonExtractorExtractAllTest extends TestCase
     {
         return [
             [
-                __DIR__ . '/../dist/ek.html',
+                __DIR__ . '/../fixtures/ek.html',
                 14,
             ],
             [
-                __DIR__ . '/../dist/zldo.html',
+                __DIR__ . '/../fixtures/zldo.html',
                 35,
             ],
             [
-                __DIR__ . '/../dist/t.html',
+                __DIR__ . '/../fixtures/t.html',
                 35,
             ],
         ];

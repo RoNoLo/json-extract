@@ -5,6 +5,25 @@
 Small class, which will try to extract JSON strings from a string. 
 There are two functions which will achieve this.
 
+## Installation
+
+```bash
+composer require ronolo/jsonextract
+```
+
+If that does not work, you may have to add the repository to the top level composer.json like this:
+
+```json
+{
+  "repositories": [
+     {
+        "type": "vcs",
+        "url":  "https://github.com/ronolo/jsonextract.git"
+    }
+  ]
+}
+```
+
 ## Use
 
 ```php
