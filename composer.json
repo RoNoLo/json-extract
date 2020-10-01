@@ -1,9 +1,9 @@
 {
-  "name": "ronolo/jsonextract",
+  "name": "ronolo/json-extract",
   "description": "Extracts JSON from strings and returns PHP arrays.",
   "license": "MIT",
   "type": "library",
-  "homepage": "https://github.com/RoNoLo/jsonextract",
+  "homepage": "https://github.com/ronolo/json-extract",
   "authors": [
     {
       "name": "Ronald Locke"

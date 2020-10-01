@@ -112,8 +112,4 @@ Javascript Objects (Thanks to the CJSON.php)
 }
 ```
 
- 
-## Motivation
-
-One site had data which was put via JavaScript into the DOM, therefore it was 
-not possible to scrape it via guzzle.
+EOF
