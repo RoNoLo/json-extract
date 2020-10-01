@@ -21,7 +21,7 @@ class JsonExtractorExceptionsTest extends TestCase
     public function testThrowsExceptionWhenNoJsonIsFoundInString()
     {
         $this->expectException(JsonExtractorException::class);
-        $this->expectExceptionMessage("No JSON was found after given offset");
+        $this->expectExceptionMessage("No JSON was found after given offset.");
 
         $string = file_get_contents(__DIR__ . '/../fixtures/stringWithNoJson.txt');
 
@@ -34,7 +34,7 @@ class JsonExtractorExceptionsTest extends TestCase
     public function testThrowsExceptionWhenIdentifierWasNotFound()
     {
         $this->expectException(JsonExtractorException::class);
-        $this->expectExceptionMessage("The identifier was not found in the string");
+        $this->expectExceptionMessage("The identifier was not found in the string.");
 
         $string = file_get_contents(__DIR__ . '/../fixtures/ek.html');
 

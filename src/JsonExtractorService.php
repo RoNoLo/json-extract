@@ -18,14 +18,16 @@ class JsonExtractorService
      * var foo = [ ... ]
      * foo = { ... }
      *
-     * @param string $identifier
-     * @param $html String of content i.e. HTML
+     * @param string $identifier An identifier as a starting point
+     * @param string $text Text
+     *
      * @return array
-     * @throws JsonExtractorException
+     *
+     * @throws \RoNoLo\JsonExtractor\JsonExtractorException
      */
-    public function extractJsonAfterIdentifier($identifier, $html)
+    public function extractJsonAfterIdentifier(string $identifier, string $text)
     {
-        $this->string = $html;
+        $this->string = $text;
         $this->ensureAnyJsonAfterOffset();
 
         $this->ensureIdentifierInString($identifier);
@@ -43,16 +45,19 @@ class JsonExtractorService
     }
 
     /**
-     * Will extract all JSON data it can find in a string
+     * Will extract all JSON data it can find in a string.
      *
      * Only objects will be extracted.
-     * @param string $string
+     *
+     * @param string $text Text
+     *
      * @return array
-     * @throws JsonExtractorException
+     *
+     * @throws \RoNoLo\JsonExtractor\JsonExtractorException
      */
-    public function extractAllJsonData($string)
+    public function extractAllJsonData(string $text)
     {
-        $this->string = $string;
+        $this->string = $text;
         $this->ensureAnyJsonAfterOffset();
 
         $vars = [];
@@ -64,7 +69,7 @@ class JsonExtractorService
                 $this->string = null;
 
                 if (!count($vars)) {
-                    throw new JsonExtractorException("No valid JSON could be found in the given string");
+                    throw new JsonExtractorException("No valid JSON could be found in the given string.");
                 }
 
                 return $vars;
@@ -83,11 +88,15 @@ class JsonExtractorService
     }
 
     /**
-     * @param $offset
+     * Searches for the opening bracket for the next JSON object or array.
+     *
+     * @param int $offset Offset
+     *
      * @return int
+     *
      * @throws JsonExtractorException
      */
-    private function findJsonStart($offset = 0)
+    private function findJsonStart(int $offset = 0)
     {
         // Now find the very next symbol which needs to be { or [
         $strLength = strlen($this->string);
@@ -97,15 +106,19 @@ class JsonExtractorService
             }
         }
 
-        throw new JsonExtractorException("Could not find any JSON object or array after the given offset");
+        throw new JsonExtractorException("Could not find any JSON object or array after the given offset.");
     }
 
     /**
-     * @param $startPosition
-     * @return mixed
+     * Searches for the closing bracket for the current JSON object or array.
+     *
+     * @param int $startPosition
+     *
+     * @return int
+     *
      * @throws JsonExtractorException
      */
-    private function findJsonEnd($startPosition)
+    private function findJsonEnd(int $startPosition)
     {
         $symbolOpen = $this->string[$startPosition];
         $symbolClose = $symbolOpen === '{' ? '}' : ']';
@@ -118,7 +131,7 @@ class JsonExtractorService
             $i++;
 
             if (!isset($this->string[$i])) {
-                throw new JsonExtractorException("End of JSON object / array could not be found");
+                throw new JsonExtractorException("End of JSON object / JSON array could not be found.");
             }
 
             if ($this->string[$i] == $symbolOpen) {
@@ -138,12 +151,14 @@ class JsonExtractorService
     }
 
     /**
-     * @param $startPosition
-     * @param $endPosition
+     * @param int $startPosition
+     * @param int $endPosition
+     *
      * @return mixed
+     *
      * @throws JsonExtractorException
      */
-    private function decodeJson($startPosition, $endPosition)
+    private function decodeJson(int $startPosition, int $endPosition)
     {
         $json = substr($this->string, $startPosition, $endPosition - $startPosition + 1);
 
@@ -163,29 +178,31 @@ class JsonExtractorService
     }
 
     /**
-     * @param $identifier
+     * @param string $identifier
+     *
      * @throws JsonExtractorException
      */
-    private function ensureIdentifierInString($identifier)
+    private function ensureIdentifierInString(string $identifier)
     {
         $pos = strpos($this->string, $identifier);
 
         if ($pos === false) {
-            throw new JsonExtractorException("The identifier was not found in the string");
+            throw new JsonExtractorException("The identifier was not found in the string.");
         }
     }
 
     /**
      * @param int $offset
+     *
      * @throws JsonExtractorException
      */
     private function ensureAnyJsonAfterOffset($offset = 0)
     {
-        $object = strpos($this->string, '{');
-        $array = strpos($this->string, '[');
+        $object = strpos($this->string, '{', $offset);
+        $array = strpos($this->string, '[', $offset);
 
         if ($object === false && $array === false) {
-            throw new JsonExtractorException("No JSON was found after given offset");
+            throw new JsonExtractorException("No JSON was found after given offset.");
         }
     }
 }

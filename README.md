@@ -3,22 +3,23 @@
 ## Abstract
 
 Small class, which will try to extract JSON strings from a string. 
-There are two functions which will achieve this.
+There are two functions which will achieve that.
 
 ## Installation
 
 ```bash
-composer require ronolo/jsonextract
+composer require ronolo/json-extract
 ```
 
-If that does not work, you may have to add the repository to the top level composer.json like this:
+If that does not work, you may have to add the repository to the top level 
+composer.json like this:
 
 ```json
 {
   "repositories": [
      {
         "type": "vcs",
-        "url":  "https://github.com/ronolo/jsonextract.git"
+        "url":  "https://github.com/ronolo/json-extract.git"
     }
   ]
 }
@@ -59,6 +60,10 @@ list of JSON data for data you was looking for.
 It is recommend to break HTML down into smaller parts with a DOM parser,
 like symfony/dom-crawler or similar. The smaller the portion is which shall
 be parsed the better will be the result.
+
+For example, if you parse a HTML string and expect the JSON inside the
+<head> ... </head> tags, feed only the text inside the tags to the json-extract
+functions.
 
 ## Can extract
 
