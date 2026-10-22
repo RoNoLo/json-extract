@@ -1,42 +1,38 @@
 <?php
 
-namespace RoNoLo\JsonExtractor;
+declare(strict_types=1);
+
+namespace RoNoLo\JsonExtractor\Tests;
 
 use PHPUnit\Framework\TestCase;
 use RoNoLo\JsonExtractor\JsonExtractorException;
+use RoNoLo\JsonExtractor\JsonExtractorService;
 
 class JsonExtractorExceptionsTest extends TestCase
 {
-    /** @var JsonExtractorService */
-    private $jsonExtractor;
+    private JsonExtractorService $jsonExtractor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->jsonExtractor = new JsonExtractorService();
     }
 
-    /**
-     * @throws JsonExtractorException
-     */
-    public function testThrowsExceptionWhenNoJsonIsFoundInString()
+    public function testThrowsExceptionWhenNoJsonIsFoundInString(): void
     {
         $this->expectException(JsonExtractorException::class);
         $this->expectExceptionMessage("No JSON was found after given offset.");
 
-        $string = file_get_contents(__DIR__ . '/../fixtures/stringWithNoJson.txt');
+        $string = (string) file_get_contents(__DIR__ . '/../fixtures/stringWithNoJson.txt');
 
         $this->jsonExtractor->extractAllJsonData($string);
     }
 
-    /**
-     * @throws JsonExtractorException
-     */
-    public function testThrowsExceptionWhenIdentifierWasNotFound()
+    public function testThrowsExceptionWhenIdentifierWasNotFound(): void
     {
         $this->expectException(JsonExtractorException::class);
         $this->expectExceptionMessage("The identifier was not found in the string.");
 
-        $string = file_get_contents(__DIR__ . '/../fixtures/ek.html');
+        $string = (string) file_get_contents(__DIR__ . '/../fixtures/ek.html');
 
         $this->jsonExtractor->extractJsonAfterIdentifier("john", $string);
     }

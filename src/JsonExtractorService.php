@@ -1,14 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace RoNoLo\JsonExtractor;
-
-use RoNoLo\JsonExtractor\JsonExtractorException;
-
-include_once __DIR__ . '/CJSON.php';
 
 class JsonExtractorService
 {
-    private $string;
+    private ?string $string = null;
 
     /**
      * Will extract the first JSON of a declaration like this:
@@ -23,9 +21,9 @@ class JsonExtractorService
      *
      * @return array
      *
-     * @throws \RoNoLo\JsonExtractor\JsonExtractorException
+     * @throws JsonExtractorException
      */
-    public function extractJsonAfterIdentifier(string $identifier, string $text)
+    public function extractJsonAfterIdentifier(string $identifier, string $text): array
     {
         $this->string = $text;
         $this->ensureAnyJsonAfterOffset();
@@ -41,7 +39,7 @@ class JsonExtractorService
 
         $this->string = null;
 
-        return $json;
+        return (array) $json;
     }
 
     /**
@@ -53,9 +51,9 @@ class JsonExtractorService
      *
      * @return array
      *
-     * @throws \RoNoLo\JsonExtractor\JsonExtractorException
+     * @throws JsonExtractorException
      */
-    public function extractAllJsonData(string $text)
+    public function extractAllJsonData(string $text): array
     {
         $this->string = $text;
         $this->ensureAnyJsonAfterOffset();
@@ -65,10 +63,10 @@ class JsonExtractorService
         while (true) {
             try {
                 $startPosition = $this->findJsonStart($offset);
-            } catch (JsonExtractorException $e) {
+            } catch (JsonExtractorException) {
                 $this->string = null;
 
-                if (!count($vars)) {
+                if ($vars === []) {
                     throw new JsonExtractorException("No valid JSON could be found in the given string.");
                 }
 
@@ -81,7 +79,7 @@ class JsonExtractorService
 
                 $vars[] = $json;
                 $offset = $endPosition;
-            } catch (JsonExtractorException $e) {
+            } catch (JsonExtractorException) {
                 $offset = $startPosition + 1;
             }
         }
@@ -96,12 +94,12 @@ class JsonExtractorService
      *
      * @throws JsonExtractorException
      */
-    private function findJsonStart(int $offset = 0)
+    private function findJsonStart(int $offset = 0): int
     {
         // Now find the very next symbol which needs to be { or [
         $strLength = strlen($this->string);
         for ($i = $offset; $i < $strLength; $i++) {
-            if (in_array($this->string[$i], ['[', '{'])) {
+            if ($this->string[$i] === '[' || $this->string[$i] === '{') {
                 return $i;
             }
         }
@@ -118,13 +116,12 @@ class JsonExtractorService
      *
      * @throws JsonExtractorException
      */
-    private function findJsonEnd(int $startPosition)
+    private function findJsonEnd(int $startPosition): int
     {
         $symbolOpen = $this->string[$startPosition];
         $symbolClose = $symbolOpen === '{' ? '}' : ']';
 
-        $stack = [];
-        $stack[] = $symbolClose;
+        $stack = [$symbolClose];
 
         $i = $startPosition;
         while (true) {
@@ -134,18 +131,17 @@ class JsonExtractorService
                 throw new JsonExtractorException("End of JSON object / JSON array could not be found.");
             }
 
-            if ($this->string[$i] == $symbolOpen) {
+            if ($this->string[$i] === $symbolOpen) {
                 $stack[] = $symbolClose;
                 continue;
             }
 
-            if ($this->string[$i] == $symbolClose) {
+            if ($this->string[$i] === $symbolClose) {
                 array_pop($stack);
 
-                if (!count($stack)) {
+                if ($stack === []) {
                     return $i;
                 }
-                continue;
             }
         }
     }
@@ -158,16 +154,16 @@ class JsonExtractorService
      *
      * @throws JsonExtractorException
      */
-    private function decodeJson(int $startPosition, int $endPosition)
+    private function decodeJson(int $startPosition, int $endPosition): mixed
     {
         $json = substr($this->string, $startPosition, $endPosition - $startPosition + 1);
 
-        $return = json_decode($json, JSON_OBJECT_AS_ARRAY);
+        $return = json_validate($json) ? json_decode($json, true) : null;
 
         if (!$return) {
-            $return = \CJSON::decode($json);
+            $return = CJSON::decode($json);
 
-            if (!$return || is_array($return) && !count(array_filter($return))) {
+            if (!$return || (is_array($return) && count(array_filter($return)) === 0)) {
                 $errorMessage = json_last_error_msg();
 
                 throw new JsonExtractorException($errorMessage);
@@ -182,11 +178,9 @@ class JsonExtractorService
      *
      * @throws JsonExtractorException
      */
-    private function ensureIdentifierInString(string $identifier)
+    private function ensureIdentifierInString(string $identifier): void
     {
-        $pos = strpos($this->string, $identifier);
-
-        if ($pos === false) {
+        if (!str_contains($this->string, $identifier)) {
             throw new JsonExtractorException("The identifier was not found in the string.");
         }
     }
@@ -196,7 +190,7 @@ class JsonExtractorService
      *
      * @throws JsonExtractorException
      */
-    private function ensureAnyJsonAfterOffset($offset = 0)
+    private function ensureAnyJsonAfterOffset(int $offset = 0): void
     {
         $object = strpos($this->string, '{', $offset);
         $array = strpos($this->string, '[', $offset);

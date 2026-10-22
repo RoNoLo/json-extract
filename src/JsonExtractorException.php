@@ -1,5 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace RoNoLo\JsonExtractor;
 
-class JsonExtractorException extends \Exception {}
+use Exception;
+
+class JsonExtractorException extends Exception
+{
+}

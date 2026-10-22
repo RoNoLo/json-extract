@@ -1,34 +1,33 @@
 <?php
 
-namespace RoNoLo\JsonExtractor;
+declare(strict_types=1);
 
+namespace RoNoLo\JsonExtractor\Tests;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use RoNoLo\JsonExtractor\JsonExtractorException;
+use RoNoLo\JsonExtractor\JsonExtractorService;
 
 class JsonExtractorExtractAllTest extends TestCase
 {
-    /** @var JsonExtractorService */
-    private $jsonExtractor;
+    private JsonExtractorService $jsonExtractor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->jsonExtractor = new JsonExtractorService();
     }
 
-    /**
-     * @dataProvider canExtractAllJsonObjectsDataProvider
-     * @throws JsonExtractorException
-     */
-    public function testCanExtractAllJsonObjects($testFile, $expected)
+    #[DataProvider('canExtractAllJsonObjectsDataProvider')]
+    public function testCanExtractAllJsonObjects(string $testFile, int $expected): void
     {
-        $html = file_get_contents($testFile);
+        $html = (string) file_get_contents($testFile);
 
         $result = $this->jsonExtractor->extractAllJsonData($html);
 
-        $this->assertEquals($expected, count($result));
+        $this->assertCount($expected, $result);
     }
 
-    public function canExtractAllJsonObjectsDataProvider()
+    public static function canExtractAllJsonObjectsDataProvider(): array
     {
         return [
             [

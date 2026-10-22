@@ -1,39 +1,35 @@
 <?php
 
-namespace RoNoLo\JsonExtractor;
+declare(strict_types=1);
 
+namespace RoNoLo\JsonExtractor\Tests;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use RoNoLo\JsonExtractor\JsonExtractorService;
 
 class JsonExtractorSingleIdentifierExtractTest extends TestCase
 {
-    /** @var JsonExtractorService */
-    private $jsonExtractor;
+    private JsonExtractorService $jsonExtractor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->jsonExtractor = new JsonExtractorService();
     }
 
-    /**
-     * @dataProvider canExtractJsonVariableDataProvider
-     *
-     * @param $html
-     * @param $expected
-     * @param $var
-     * @throws \Exception
-     */
-    public function testCanExtractJsonVariable($html, $expected, $var)
+    #[DataProvider('canExtractJsonVariableDataProvider')]
+    public function testCanExtractJsonVariable(string $html, string $expected, string $var): void
     {
-        $html = file_get_contents($html);
+        $htmlContent = (string) file_get_contents($html);
 
-        $expected = json_decode(file_get_contents($expected), true);
+        $expectedData = json_decode((string) file_get_contents($expected), true);
 
-        $result = $this->jsonExtractor->extractJsonAfterIdentifier($var, $html);
+        $result = $this->jsonExtractor->extractJsonAfterIdentifier($var, $htmlContent);
 
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expectedData, $result);
     }
 
-    public function canExtractJsonVariableDataProvider()
+    public static function canExtractJsonVariableDataProvider(): array
     {
         return [
             [
